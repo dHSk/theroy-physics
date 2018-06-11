@@ -10,6 +10,8 @@ Homework3:optimization problem
 
 from pylab import *
 
+# The input parameters' meaning is the equation f(x1,x2)=A1*x1^2+A2*x2^2+A3*x1*x2+B1*x1+B2*x2+C
+
 class parameter_in:
     def __init__(self,_A1=0,_A2=0,_A3=0,_B1=0,_B2=0,_C=0):
         self.A1=_A1
