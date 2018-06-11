@@ -1,0 +1,87 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jun 11 09:26:54 2018
+
+@author: Yuki
+
+Homework3:optimization problem
+"""
+
+from pylab import *
+
+class parameter_in:
+    def __init__(self,_A1=0,_A2=0,_A3=0,_B1=0,_B2=0,_C=0):
+        self.A1=_A1
+        self.A2=_A2
+        self.A3=_A3
+        self.B1=_B1
+        self.B2=_B2
+        self.C=_C
+
+class initial_point:
+    def __init__(self,_b1=0,_b2=0):
+        self.b1=_b1
+        self.b2=_b2
+
+class cal:
+    def __init__(self,_P=parameter_in(0,0,0,0,0,0),_Ip=initial_point(0,0),_t=0.1):
+        self.t=_t
+        self.P=[]
+        self.b=[]
+        self.P.append(_P)
+        self.b.append(_Ip)
+        self.alp1=[]
+        self.alp2=[]
+
+    def calculate(self,current_state):
+        alp1=-(current_state.b1+(self.P[-1].A3*current_state.b2+self.P[-1].B1)/self.P[-1].A1/2)
+        self.alp1.append(alp1)
+        next_b1=current_state.b1+alp1
+        alp2=-(current_state.b2+(self.P[-1].A3*current_state.b1+self.P[-1].B2)/self.P[-1].A2/2)
+        self.alp2.append(alp2)
+        next_b2=current_state.b2+alp2
+        return initial_point(next_b1,next_b2)
+    
+    def find_solution(self):
+        i=1 # random to give a random number, % is to find the remainder, int to get the integer.
+        while i > self.t:
+            self.b.append(self.calculate(self.b[-1]))
+            i=sqrt(abs((self.b[-1].b1-self.b[-2].b1)*(self.b[-1].b1-self.b[-2].b1)+(self.b[-1].b2-self.b[-2].b2)*(self.b[-1].b2-self.b[-2].b2)))
+            print(i)
+            print(self.b[-1].b1,self.b[-1].b2)
+
+a=cal(parameter_in(1,1,-1,-10,-4,60),initial_point(0,0),_t=0.001)
+a.find_solution()
+
+"""
+The output is below:
+5.38516480713
+5.0 2.0
+2.69258240357
+6.0 4.5
+1.34629120178
+7.25 5.0
+0.673145600892
+7.5 5.625
+0.336572800446
+7.8125 5.75
+0.168286400223
+7.875 5.90625
+0.0841432001115
+7.953125 5.9375
+0.0420716000557
+7.96875 5.9765625
+0.0210358000279
+7.98828125 5.984375
+0.0105179000139
+7.9921875 5.994140625
+0.00525895000697
+7.9970703125 5.99609375
+0.00262947500348
+7.998046875 5.99853515625
+0.00131473750174
+7.999267578125 5.9990234375
+0.000657368750871
+7.99951171875 5.9996337890625
+We can get the solution is (7.99951171875,5.9996337890625), right answer is (8,6), we can find that it's very close.
+"""
