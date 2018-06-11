@@ -1,0 +1,114 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Apr 17 11:11:22 2018
+
+@author: Yuki
+
+Homework1:Monte Carlo
+"""
+
+# This program is writed to solve three unknow parameter equation with order 1.
+
+from pylab import *
+import random
+import numpy as np
+from sympy import *
+
+# Input parameters matrix A
+
+class value_A:
+    def __init__(self,_A11=0,_A12=0,_A13=0,_A21=0,_A22=0,_A23=0,_A31=0,_A32=0,_A33=0):
+        self.A11=_A11
+        self.A12=_A12
+        self.A13=_A13
+        self.A21=_A21
+        self.A22=_A22
+        self.A23=_A23
+        self.A31=_A31
+        self.A32=_A32
+        self.A33=_A33
+
+# Input b
+
+class value_b:
+    def __init__(self,_b1=0,_b2=0,_b3=0):
+        self.b1=_b1
+        self.b2=_b2
+        self.b3=_b3
+        
+class cal:
+    def __init__(self,_A=value_A(0,0,0,0,0,0,0,0,0),_b=value_b(0,0,0),_t=500):
+        self.t=_t
+        self.A=[]
+        self.b=[]
+        self.A.append(_A)
+        self.b.append(_b)
+        self.Vf=[]
+        self.x=[]
+
+    def calculate(self,m):
+        BB=np.array([[1-(self.A[-1].A11),-self.A[-1].A12,-self.A[-1].A13],[-self.A[-1].A21,1-(self.A[-1].A22),-self.A[-1].A23],[-self.A[-1].A31,-self.A[-1].A32,1-(self.A[-1].A33)]])
+        bb=np.array([self.b[-1].b1,self.b[-1].b2,self.b[-1].b3])
+        f=1
+        ii=[]
+        ii.append(m)
+        ci=int(100*random.random())%4+1 # random to give a random number, % is to find the remainder, int to get the integer.
+        while ci < 4:
+           ii.append(ci)
+           f=f*BB[ii[-2]-1,ii[-1]-1]*4
+           ci=int(100*random.random())%4+1
+        
+        f=f*bb[ii[-1]-1]*4
+        self.Vf.append(f)
+    
+    def find_answer(self):
+        fi=1
+        fj=0
+        fm=0
+        jud=0
+        while fi < 4:
+            while fj < self.t:
+                self.calculate(fi)
+                fm=fm+self.Vf[-1]
+                fj=fj+1
+            fm=fm/self.t
+            self.x.append(fm)
+            fm=0
+            fj=0
+            fi=fi+1
+        print(self.x)
+        jud=self.A[-1].A11*self.x[0]+self.A[-1].A12*self.x[1]+self.A[-1].A13*self.x[2]-self.b[-1].b1
+        print(jud)
+        if abs(jud) < 10:
+            print("true")
+        else:
+            print("Eigen value of B maybe bigger than 1 or it has no answer")
+        
+            
+a=cal(value_A(1,0,0,0,1,0,0,0,1),value_b(1,2,3),_t=5000)
+a.find_answer()
+b=cal(value_A(1,1,1,1,1,1,1,1,1),value_b(1,1,1),_t=500) # If A is strange, it will give a unreasonable answer.
+b.find_answer()
+c=cal(value_A(1,0,0,0,1,0,0,0,0),value_b(1,2,0),_t=1000) # You can also set less unknow to solve 1 or 2 unknow equation.
+c.find_answer()
+d=cal(value_A(1,1,1,2,1,3,3,2,1),value_b(1,3,4),_t=5000)
+d.find_answer()
+
+"""
+The output is below:
+[1.004, 1.9696, 3.0720000000000001]
+0.004
+true
+[-203.08799999999999, -33957.440000000002, 364.96800000000002]
+-33796.56
+Eigen value of B maybe bigger than 1 or it has no answer
+[0.96799999999999997, 1.9039999999999999, 0.0]
+-0.032
+true
+[-402169.29440000001, 307487.65039999998, 282160.06079999998]
+187477.4168
+Eigen value of B maybe bigger than 1 or it has no answer
+
+We can see that this method can only solve some particular situation, if the matrix's eigen is bigger than 1, it will output a very big answer.
+"""
+    
