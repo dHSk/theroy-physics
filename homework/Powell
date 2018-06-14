@@ -114,6 +114,6 @@ The output is below:
 8.000487670206699 6.001025215775443
 0.000769316120124
 8.000512216595054 6.00026836880113
-We can get the solution is (7.99951171875,5.9996337890625), right answer is (8,6).
+We can get the solution is (8.000512216595054,6.00026836880113), right answer is (8,6).
 We can consider it as the same result at a small precision range.
 """
