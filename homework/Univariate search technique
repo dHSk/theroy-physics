@@ -6,7 +6,7 @@ Created on Mon Jun 11 09:26:54 2018
 Id: 2017202020005
 
 Subject 2:optimization problem
-Homework3:univariate search technique
+Homework3:Univariate search technique
 """
 
 from pylab import *
